@@ -25,6 +25,10 @@ public class Employee {
     private Employer employer;
 
     @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name="managerId", referencedColumnName="employee_id"),
+            @JoinColumn(name="managerEmployerId", referencedColumnName="employerId")
+    })
     private Employee manager;
 
     @OneToMany(mappedBy="manager")
