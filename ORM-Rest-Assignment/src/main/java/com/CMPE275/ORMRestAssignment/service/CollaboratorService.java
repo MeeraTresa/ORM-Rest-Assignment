@@ -1,9 +1,10 @@
 package com.CMPE275.ORMRestAssignment.service;
 
-import com.CMPE275.lab2.entity.Employee;
-import com.CMPE275.lab2.entity.EmployeeId;
-import com.CMPE275.lab2.exception.RecordDoesNotExistException;
-import com.CMPE275.lab2.repository.EmployeeRepository;
+
+import com.CMPE275.ORMRestAssignment.entity.Employee;
+import com.CMPE275.ORMRestAssignment.entity.EmployeeId;
+import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
+import com.CMPE275.ORMRestAssignment.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

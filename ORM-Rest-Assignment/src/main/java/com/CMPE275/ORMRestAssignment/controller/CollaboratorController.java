@@ -1,8 +1,9 @@
 package com.CMPE275.ORMRestAssignment.controller;
 
-import com.CMPE275.lab2.exception.RecordDoesNotExistException;
-import com.CMPE275.lab2.service.CollaboratorService;
-import com.CMPE275.lab2.util.Util;
+
+import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
+import com.CMPE275.ORMRestAssignment.service.CollaboratorService;
+import com.CMPE275.ORMRestAssignment.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

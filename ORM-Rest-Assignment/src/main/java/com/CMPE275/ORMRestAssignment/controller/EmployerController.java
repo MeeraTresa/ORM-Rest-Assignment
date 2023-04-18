@@ -1,11 +1,12 @@
 package com.CMPE275.ORMRestAssignment.controller;
 
-import com.CMPE275.lab2.entity.Employer;
-import com.CMPE275.lab2.exception.BadRequestException;
-import com.CMPE275.lab2.exception.RecordDoesNotExistException;
-import com.CMPE275.lab2.model.EmployerModel;
-import com.CMPE275.lab2.service.EmployerService;
-import com.CMPE275.lab2.util.Util;
+
+import com.CMPE275.ORMRestAssignment.entity.Employer;
+import com.CMPE275.ORMRestAssignment.exception.BadRequestException;
+import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
+import com.CMPE275.ORMRestAssignment.model.EmployerModel;
+import com.CMPE275.ORMRestAssignment.service.EmployerService;
+import com.CMPE275.ORMRestAssignment.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -86,7 +87,10 @@ public class EmployerController {
     }
 
     /***
-     *
+     *This method deletes the employer object with the given ID. No entities returned.
+     * ● If there is still any employee belonging to this employer, return 400.
+     * ● If the employer with the given ID does not exist, return 404.
+     * ● Return HTTP code 200.
      * @param id
      * @param format
      * @return
@@ -96,10 +100,11 @@ public class EmployerController {
     @DeleteMapping(path = "employer/{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Employer> deleteEmployer(
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteEmployer(
             @PathVariable(required = true) Long id,
             @RequestParam(required = false) String format) throws RecordDoesNotExistException, BadRequestException {
-        return new ResponseEntity<>(employerService.deleteEmployer(id, format),
-                Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
+        employerService.deleteEmployer(id, format);
+
     }
 }

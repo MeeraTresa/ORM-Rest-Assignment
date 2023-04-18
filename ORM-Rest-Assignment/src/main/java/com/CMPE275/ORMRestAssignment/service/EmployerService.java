@@ -1,11 +1,12 @@
 package com.CMPE275.ORMRestAssignment.service;
 
-import com.CMPE275.lab2.entity.Address;
-import com.CMPE275.lab2.entity.Employer;
-import com.CMPE275.lab2.exception.BadRequestException;
-import com.CMPE275.lab2.exception.RecordDoesNotExistException;
-import com.CMPE275.lab2.model.EmployerModel;
-import com.CMPE275.lab2.repository.EmployerRepository;
+import com.CMPE275.ORMRestAssignment.entity.Address;
+import com.CMPE275.ORMRestAssignment.entity.Employer;
+import com.CMPE275.ORMRestAssignment.exception.BadRequestException;
+import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
+
+import com.CMPE275.ORMRestAssignment.model.EmployerModel;
+import com.CMPE275.ORMRestAssignment.repository.EmployerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

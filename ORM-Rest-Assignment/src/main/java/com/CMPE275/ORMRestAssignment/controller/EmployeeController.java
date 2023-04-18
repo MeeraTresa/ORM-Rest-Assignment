@@ -1,11 +1,12 @@
 package com.CMPE275.ORMRestAssignment.controller;
 
-import com.CMPE275.lab2.entity.Employee;
-import com.CMPE275.lab2.exception.BadRequestException;
-import com.CMPE275.lab2.exception.RecordDoesNotExistException;
-import com.CMPE275.lab2.model.EmployeeModel;
-import com.CMPE275.lab2.service.EmployeeService;
-import com.CMPE275.lab2.util.Util;
+
+import com.CMPE275.ORMRestAssignment.entity.Employee;
+import com.CMPE275.ORMRestAssignment.exception.BadRequestException;
+import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
+import com.CMPE275.ORMRestAssignment.model.EmployeeModel;
+import com.CMPE275.ORMRestAssignment.service.EmployeeService;
+import com.CMPE275.ORMRestAssignment.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
