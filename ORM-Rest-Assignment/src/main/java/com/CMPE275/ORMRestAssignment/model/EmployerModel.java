@@ -1,13 +1,13 @@
-package com.CMPE275.ORMRestAssignment.entity;
+package com.CMPE275.ORMRestAssignment.model;
 
-import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
 
-@Embeddable
 @Getter
 @Setter
-public class Address {
+public class EmployerModel {
+    private String name;// required and must be unique
+    private String description;
     private String street; // e.g., 100 Main ST
     private String city;
     private String state;
