@@ -82,8 +82,8 @@ public class EmployeeService {
         EmployeeId employeeId = new EmployeeId(id, employerId);
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isEmpty()) {
-            throw new RecordDoesNotExistException(String.format("Employee does not exist for employerId: {} and" +
-                    "emplyeeId:{}", employerId, employeeId), format);
+            throw new RecordDoesNotExistException(String.format("Employee does not exist for employerId: %s and" +
+                    " employeeId: %s", employerId, id), format);
         }
         return optionalEmployee.get();
     }
