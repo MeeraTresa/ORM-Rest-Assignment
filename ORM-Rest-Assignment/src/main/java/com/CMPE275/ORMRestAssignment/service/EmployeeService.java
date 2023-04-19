@@ -10,10 +10,13 @@ import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
 import com.CMPE275.ORMRestAssignment.model.EmployeeModel;
 import com.CMPE275.ORMRestAssignment.repository.EmployeeRepository;
 import com.CMPE275.ORMRestAssignment.repository.EmployerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +25,8 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private EmployerRepository employerRepository;
+    @Autowired
+    private CollaboratorService collaboratorService;
     public Employee createEmployee(Long employerId, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
         //Create an Employee Entity
         Employee employee = new Employee();
@@ -97,11 +102,21 @@ public class EmployeeService {
      * @throws RecordDoesNotExistException
      * @throws BadRequestException
      */
+    @Transactional(Transactional.TxType.REQUIRED)
     public Employee deleteEmployee(Long employerId, Long id, String format) throws RecordDoesNotExistException, BadRequestException {
         Employee employee = findEmployee(employerId, id, format);
         if (employee.getReports()!=null && !employee.getReports().isEmpty()) {
             throw new BadRequestException(String.format("Employee with id:%s has at least " +
                     "one reportee, hence cannot delete the employee", id), format);
+        }
+        //Delete Collaboration relationships
+        List<Employee> existingCollaborators = employee.getCollaborators();
+        List<Employee> existingCollaboratorsClone = new ArrayList<>(existingCollaborators);
+        for(Employee collaborator: existingCollaboratorsClone){
+            collaboratorService.deleteCollaborator(employee.getEmployeeId().getEmployerId(),
+                                                    employee.getEmployeeId().getId(),
+                                                    collaborator.getEmployeeId().getEmployerId(),
+                                                    collaborator.getEmployeeId().getId(), format);
         }
         employeeRepository.deleteById(new EmployeeId( id, employerId));
         return employee;
@@ -150,4 +165,6 @@ public class EmployeeService {
         }
         return employeeRepository.save(employee);
     }
+
+
 }

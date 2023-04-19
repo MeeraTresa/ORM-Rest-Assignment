@@ -148,4 +148,34 @@ public class EmployeeController {
                 Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
     }
 
+    /**
+     * URL: http://employer/{employerId}/employee/{id}?format={json | xml }
+     * Method: DELETE
+     * This deletes the employee object with the given ID. No entities returned.
+     * ● If the employee with the given employer ID and employee ID does not exist, return 404.
+     * ● If the employee still has a report, deletion is not allowed, hence return 400.
+     * ● Otherwise, delete the employee within a transaction
+     * ○ Remove any reference of this employee from your persistence of collaboration
+     * relations
+     * ○ If successful, HTTP status code 200 and the deleted employee in the given
+     * format, with all values prior to the deletion.
+     * @param employerId
+     * @param id
+     * @param format
+     * @return
+     * @throws RecordDoesNotExistException
+     * @throws BadRequestException
+     */
+    @DeleteMapping(
+            path="employer/{employerId}/employee/{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Employee> deleteEmployee(
+            @PathVariable(required = true) Long employerId,
+            @PathVariable(required = true) Long id,
+            @RequestParam(required = false) String format) throws RecordDoesNotExistException, BadRequestException {
+        return new ResponseEntity<>(employeeService.deleteEmployee(employerId, id, format),
+                Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
+    }
+
 }

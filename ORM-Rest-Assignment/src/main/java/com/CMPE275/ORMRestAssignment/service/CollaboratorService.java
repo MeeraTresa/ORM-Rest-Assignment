@@ -6,6 +6,7 @@ import com.CMPE275.ORMRestAssignment.entity.EmployeeId;
 import com.CMPE275.ORMRestAssignment.exception.BadRequestException;
 import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
 import com.CMPE275.ORMRestAssignment.repository.EmployeeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,7 +101,7 @@ public class CollaboratorService {
      * @throws RecordDoesNotExistException
      * @throws BadRequestException
      */
-
+    @Transactional(Transactional.TxType.MANDATORY)
     public String deleteCollaborator(Long employerId1, Long employeeId1, Long employerId2, Long employeeId2, String format) throws RecordDoesNotExistException, BadRequestException {
         Employee employee1 = findEmployee(employeeId1, employerId1, format);
         Employee employee2 = findEmployee(employeeId2, employerId2, format);
