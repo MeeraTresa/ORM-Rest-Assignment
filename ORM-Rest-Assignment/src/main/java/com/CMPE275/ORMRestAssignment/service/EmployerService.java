@@ -82,4 +82,31 @@ public class EmployerService {
         employerRepository.deleteById(id);
         return employer;
     }
+
+    public Employer updateEmployer(Long id, EmployerModel employerModel, String format) throws RecordDoesNotExistException {
+        Employer employer = findEmployer(id, format);
+        if(employer != null) {
+            if (employerModel.getName() != null && !employerModel.getName().isEmpty()) {
+                employer.setName(employerModel.getName());
+            }
+            if (employerModel.getDescription() != null && !employerModel.getDescription().isEmpty()) {
+                employer.setDescription(employerModel.getDescription());
+            }
+            Address addressToBeUpdated = employer.getAddress();
+            if (employerModel.getStreet()!=null && !employerModel.getStreet().isEmpty()) {
+                addressToBeUpdated.setStreet(employerModel.getStreet());
+            }
+            if (employerModel.getCity() != null && !employerModel.getCity().isEmpty()) {
+                addressToBeUpdated.setCity(employerModel.getCity());
+            }
+            if (employerModel.getState() != null && !employerModel.getState().isEmpty()) {
+                addressToBeUpdated.setState(employerModel.getState());
+            }
+            if (employerModel.getZip() != null && !employerModel.getZip().isEmpty()) {
+                addressToBeUpdated.setZip(employerModel.getZip());
+            }
+            employer.setAddress(addressToBeUpdated);
+        }
+        return employerRepository.save(employer);
+    }
 }

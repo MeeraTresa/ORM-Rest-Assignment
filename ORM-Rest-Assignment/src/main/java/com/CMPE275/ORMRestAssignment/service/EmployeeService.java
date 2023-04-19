@@ -87,4 +87,64 @@ public class EmployeeService {
         }
         return optionalEmployee.get();
     }
+
+    /**
+     * TO DO in Transaction
+     * @param employerId
+     * @param id
+     * @param format
+     * @return
+     * @throws RecordDoesNotExistException
+     * @throws BadRequestException
+     */
+    public Employee deleteEmployee(Long employerId, Long id, String format) throws RecordDoesNotExistException, BadRequestException {
+        Employee employee = findEmployee(employerId, id, format);
+        if (employee.getReports()!=null && !employee.getReports().isEmpty()) {
+            throw new BadRequestException(String.format("Employee with id:%s has at least " +
+                    "one reportee, hence cannot delete the employee", id), format);
+        }
+        employeeRepository.deleteById(new EmployeeId( id, employerId));
+        return employee;
+    }
+
+    public Employee updateEmployee(Long employerId, Long id, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
+        Employee employee = findEmployee(employerId, id, format);
+        if (employeeModel.getName()!= null && !employeeModel.getName().isEmpty()) {
+            employee.setName(employeeModel.getName());
+        }
+        if (employeeModel.getEmail()!= null && !employeeModel.getEmail().isEmpty()) {
+            employee.setEmail(employeeModel.getEmail());
+        }
+        if (employeeModel.getTitle()!= null && !employeeModel.getTitle().isEmpty()) {
+            employee.setTitle(employeeModel.getTitle());
+        }
+        Address updatedAddress = employee.getAddress();
+        if (employeeModel.getStreet()!= null && !employeeModel.getStreet().isEmpty()) {
+            updatedAddress.setStreet(employeeModel.getStreet());
+        }
+        if (employeeModel.getCity()!= null && !employeeModel.getCity().isEmpty()) {
+            updatedAddress.setCity(employeeModel.getCity());
+        }
+        if (employeeModel.getState()!= null && !employeeModel.getState().isEmpty()) {
+            updatedAddress.setState(employeeModel.getState());
+        }
+        if (employeeModel.getZip()!= null && !employeeModel.getZip().isEmpty()) {
+            updatedAddress.setZip(employeeModel.getZip());
+        }
+        employee.setAddress(updatedAddress);
+        if (employeeModel.getManagerId() != null) {
+            // check if the new manager belongs to the same employer as employee
+            Long managerId = employeeModel.getManagerId();
+            Employee manager;
+            try {
+                manager = findManager(employerId, managerId, format);
+            } catch (RecordDoesNotExistException ex) {
+                throw new BadRequestException(ex.getMessage(), format);
+            }
+            if(manager != null) {
+                employee.setManager(manager);
+            }
+        }
+        return employeeRepository.save(employee);
+    }
 }

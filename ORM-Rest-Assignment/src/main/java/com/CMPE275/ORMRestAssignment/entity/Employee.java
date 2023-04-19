@@ -36,7 +36,7 @@ public class Employee {
     @JsonIgnoreProperties({"address","employer","manager","reports","collaborators","collaboratorOf"})
     private List<Employee> reports; // director reports who have the current employee as their manager.
 
-    @ManyToMany(cascade=CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(name="collaboration",
             joinColumns = {
                     @JoinColumn(name = "employeeId", referencedColumnName = "employee_id"),
@@ -50,7 +50,7 @@ public class Employee {
     @JsonIgnoreProperties({"address","employer","manager","reports","collaborators","collaboratorOf"})
     private List<Employee> collaborators;
 
-    @ManyToMany(mappedBy = "collaborators", cascade=CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "collaborators")
     @JsonIgnore
     private List<Employee> collaboratorOf;
 

@@ -98,4 +98,54 @@ public class EmployeeController {
                 Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
     }
 
+    /**
+     * Path: employer/{employerId}/employee/{id}?name=XX&email=ZZ&title=UU&street=VV$......
+     * &format={json | xml }
+     * Method: PUT
+     * This API updates an employee object.
+     * @param employerId
+     * @param id
+     * @param name
+     * @param email
+     * @param title
+     * @param street
+     * @param city
+     * @param state
+     * @param zip
+     * @param managerId
+     * @param format
+     * @return
+     * @throws RecordDoesNotExistException
+     * @throws BadRequestException
+     */
+    @PutMapping(
+            path = "employer/{employerId}/employee/{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Employee> updateEmployee(
+            @PathVariable(required = true) Long employerId,
+            @PathVariable(required = true) Long id,
+            @RequestParam(required = true) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String street,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String zip,
+            @RequestParam(required = false) Long managerId,
+            @RequestParam(required = false) String format
+    ) throws RecordDoesNotExistException, BadRequestException {
+        EmployeeModel employeeModel = new EmployeeModel();
+        employeeModel.setName(name);
+        employeeModel.setEmail(email);
+        employeeModel.setTitle(title);
+        employeeModel.setStreet(street);
+        employeeModel.setCity(city);
+        employeeModel.setState(state);
+        employeeModel.setZip(zip);
+        employeeModel.setManagerId(managerId);
+        return new ResponseEntity<>(employeeService.updateEmployee(employerId, id, employeeModel, format),
+                Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
+    }
+
 }

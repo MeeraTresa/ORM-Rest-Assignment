@@ -107,4 +107,42 @@ public class EmployerController {
         employerService.deleteEmployer(id, format);
 
     }
+
+    /**
+     * Path: employer/{id}?name=XX&description=YY&street=ZZ&...&format={json | xml }
+     * Method: PUT
+     * This API updates an employer object and returns its full form.
+     * ● For simplicity, all the fields (name, description, street, city, etc), except ID, are passed in
+     * as query parameters. Only name is required.
+     * ● Similar to the get method, the request returns the updated employer object, including all
+     * attributes in JSON. If the employer ID does not exist, 404 should be returned. If required
+     * parameters are missing, return 400 instead. Otherwise, return 200.
+     * @param id
+     * @param name
+     * @param description
+     * @param street
+     * @param city
+     * @param state
+     * @param zip
+     * @param format
+     * @return
+     * @throws RecordDoesNotExistException
+     */
+    @PutMapping(path = "employer/{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Employer> updateEmployer(
+            @PathVariable(required = true) Long id,
+            @RequestParam(required = true) String name,
+            @RequestParam(required= false) String description,
+            @RequestParam(required= false) String street,
+            @RequestParam(required= false) String city,
+            @RequestParam(required= false) String state,
+            @RequestParam(required= false) String zip,
+            @RequestParam(required = false) String format) throws RecordDoesNotExistException {
+        EmployerModel employerModel = new EmployerModel(name, description,
+                street, city, state, zip);
+        return new ResponseEntity<>(employerService.updateEmployer(id, employerModel, format),
+                Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
+    }
 }
