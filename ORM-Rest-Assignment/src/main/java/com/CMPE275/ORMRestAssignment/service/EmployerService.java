@@ -92,7 +92,11 @@ public class EmployerService {
             if (employerModel.getDescription() != null && !employerModel.getDescription().isEmpty()) {
                 employer.setDescription(employerModel.getDescription());
             }
+
             Address addressToBeUpdated = employer.getAddress();
+            if(addressToBeUpdated==null){
+                addressToBeUpdated = new Address();
+            }
             if (employerModel.getStreet()!=null && !employerModel.getStreet().isEmpty()) {
                 addressToBeUpdated.setStreet(employerModel.getStreet());
             }

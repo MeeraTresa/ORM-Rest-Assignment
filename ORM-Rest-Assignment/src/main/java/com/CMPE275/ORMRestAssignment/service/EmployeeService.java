@@ -119,6 +119,9 @@ public class EmployeeService {
             employee.setTitle(employeeModel.getTitle());
         }
         Address updatedAddress = employee.getAddress();
+        if(updatedAddress==null){
+            updatedAddress = new Address();
+        }
         if (employeeModel.getStreet()!= null && !employeeModel.getStreet().isEmpty()) {
             updatedAddress.setStreet(employeeModel.getStreet());
         }
