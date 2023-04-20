@@ -75,8 +75,8 @@ public class EmployerService {
         Employer employer = findEmployer(id, format);
         if (employer.getEmployees() != null && !employer.getEmployees().isEmpty()) {
             throw new BadRequestException(
-                    String.format("Employer with id: %s has one employee, hence cannot delete",
-                            id),
+                    String.format("Employer with id: %s has %d employee(s), hence cannot delete",
+                            id,employer.getEmployees().size()),
                     format);
         }
         employerRepository.deleteById(id);
