@@ -30,6 +30,7 @@ public class EmployeeService {
     private CollaboratorService collaboratorService;
     public Employee createEmployee(Long employerId, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
         //Create an Employee Entity
+
         Employee employee = new Employee();
         //Find the Employer entity corresponding to the passed employerId
         Optional<Employer> employer = employerRepository.findById(employerId);
@@ -49,7 +50,7 @@ public class EmployeeService {
         employee.setEmployer(employer.get());
         //Since auto increment is not working, find the next employee ID in sequence
         //Revisit this custom query
-        Long nextVal = employeeRepository.getNextSequence()+1;
+        Long nextVal = employeeRepository.getNextSequence(employerId)+1;
         EmployeeId eId = new EmployeeId(nextVal, employerId);
         employee.setEmployeeId(eId);
 

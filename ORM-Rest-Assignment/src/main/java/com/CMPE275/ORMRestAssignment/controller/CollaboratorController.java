@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping(value = "/api/v1/")
 public class CollaboratorController {
@@ -21,12 +23,13 @@ public class CollaboratorController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> updateCollaborator(
-            @PathVariable Long employerId1,
-            @PathVariable Long employeeId1,
-            @PathVariable Long employerId2,
-            @PathVariable Long employeeId2,
+            @PathVariable(required = true) Long employerId1,
+            @PathVariable(required = true) Long employeeId1,
+            @PathVariable(required = true) Long employerId2,
+            @PathVariable(required = true) Long employeeId2,
             @RequestParam(required = false) String format
     ) throws RecordDoesNotExistException {
+
         return new ResponseEntity<>(collaboratorService.
                 updateCollaborator(employerId1,
                         employeeId1,

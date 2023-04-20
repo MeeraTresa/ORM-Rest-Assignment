@@ -101,7 +101,7 @@ public class CollaboratorService {
      * @throws RecordDoesNotExistException
      * @throws BadRequestException
      */
-    @Transactional(Transactional.TxType.MANDATORY)
+    @Transactional(Transactional.TxType.REQUIRED)
     public String deleteCollaborator(Long employerId1, Long employeeId1, Long employerId2, Long employeeId2, String format) throws RecordDoesNotExistException, BadRequestException {
         Employee employee1 = findEmployee(employeeId1, employerId1, format);
         Employee employee2 = findEmployee(employeeId2, employerId2, format);
