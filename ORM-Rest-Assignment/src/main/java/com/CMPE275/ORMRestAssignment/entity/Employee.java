@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+
 public class Employee {
 
     @EmbeddedId
@@ -55,6 +57,23 @@ public class Employee {
     private List<Employee> collaboratorOf;
 
     public Employee() {}
+
+    //Copy constructor for employee deletion usecase
+    public Employee(Employee employee){
+        this.setEmployeeId(employee.getEmployeeId());
+        this.setName(employee.getName());
+        this.setAddress(employee.getAddress());
+        this.setTitle(employee.getTitle());
+        this.setEmail(employee.getEmail());
+        this.setManager(employee.getManager());
+        this.setEmployer(employee.getEmployer());
+        List<Employee> collaboratorsCopy = new ArrayList<>(employee.getCollaborators());
+        this.setCollaborators(collaboratorsCopy);
+        List<Employee> reportsCopy = new ArrayList<>(employee.getReports());
+        this.setReports(employee.getReports());
+        List<Employee> collaboratorOfCopy = new ArrayList<>(employee.getCollaboratorOf());
+        this.setCollaboratorOf(employee.getCollaboratorOf());
+    }
 
     public EmployeeId getEmployeeId() {
         return employeeId;

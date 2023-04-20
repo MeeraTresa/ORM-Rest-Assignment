@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -105,6 +106,7 @@ public class EmployeeService {
     @Transactional(Transactional.TxType.REQUIRED)
     public Employee deleteEmployee(Long employerId, Long id, String format) throws RecordDoesNotExistException, BadRequestException {
         Employee employee = findEmployee(employerId, id, format);
+        Employee employeeCopy = new Employee(employee);
         if (employee.getReports()!=null && !employee.getReports().isEmpty()) {
             throw new BadRequestException(String.format("Employee with id:%s has at least " +
                     "one reportee, hence cannot delete the employee", id), format);
@@ -119,7 +121,7 @@ public class EmployeeService {
                                                     collaborator.getEmployeeId().getId(), format);
         }
         employeeRepository.deleteById(new EmployeeId( id, employerId));
-        return employee;
+        return employeeCopy;
     }
 
     public Employee updateEmployee(Long employerId, Long id, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
