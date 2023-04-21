@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -28,7 +27,7 @@ public class EmployeeService {
     private EmployerRepository employerRepository;
     @Autowired
     private CollaboratorService collaboratorService;
-    public Employee createEmployee(Long employerId, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
+    public Employee createEmployee(String employerId, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
         //Create an Employee Entity
 
         Employee employee = new Employee();
@@ -73,7 +72,7 @@ public class EmployeeService {
 
     }
 
-    private Employee findManager(Long employerId, Long managerId, String format) throws RecordDoesNotExistException {
+    private Employee findManager(String employerId, Long managerId, String format) throws RecordDoesNotExistException {
         EmployeeId employeeId = new EmployeeId();
         employeeId.setId(managerId);
         employeeId.setEmployerId(employerId);
@@ -85,7 +84,7 @@ public class EmployeeService {
         return optionalManager.get();
     }
 
-    public Employee findEmployee(Long employerId, Long id, String format) throws RecordDoesNotExistException {
+    public Employee findEmployee(String employerId, Long id, String format) throws RecordDoesNotExistException {
         EmployeeId employeeId = new EmployeeId(id, employerId);
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isEmpty()) {
@@ -105,7 +104,7 @@ public class EmployeeService {
      * @throws BadRequestException
      */
     @Transactional(Transactional.TxType.REQUIRED)
-    public Employee deleteEmployee(Long employerId, Long id, String format) throws RecordDoesNotExistException, BadRequestException {
+    public Employee deleteEmployee(String employerId, Long id, String format) throws RecordDoesNotExistException, BadRequestException {
         Employee employee = findEmployee(employerId, id, format);
         Employee employeeCopy = new Employee(employee);
         if (employee.getReports()!=null && !employee.getReports().isEmpty()) {
@@ -125,7 +124,7 @@ public class EmployeeService {
         return employeeCopy;
     }
 
-    public Employee updateEmployee(Long employerId, Long id, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
+    public Employee updateEmployee(String employerId, Long id, EmployeeModel employeeModel, String format) throws RecordDoesNotExistException, BadRequestException {
         Employee employee = findEmployee(employerId, id, format);
         if (employeeModel.getName()!= null && !employeeModel.getName().isEmpty()) {
             employee.setName(employeeModel.getName());

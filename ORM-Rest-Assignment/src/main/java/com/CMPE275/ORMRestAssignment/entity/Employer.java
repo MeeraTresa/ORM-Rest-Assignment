@@ -2,14 +2,21 @@ package com.CMPE275.ORMRestAssignment.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Set;
 
 @Entity
 public class Employer {
+
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //primary key
+    @Column(updatable = false, nullable = false)
+    private String id;
     @Column(nullable = false, unique = true)
     private String name;// required and must be unique
     private String description;
@@ -18,11 +25,11 @@ public class Employer {
     @JsonIgnoreProperties({"address","employer","manager","reports","collaborators","collaboratorOf"})
     private Set<Employee> employees;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -36,6 +36,7 @@ public class EmployerService {
         address.setStreet(employerModel.getStreet());
         address.setZip(employerModel.getZip());
         employer.setAddress(address);
+
         try{
             return employerRepository.save(employer);
         }catch (DataIntegrityViolationException e){
@@ -51,7 +52,7 @@ public class EmployerService {
      * @return
      * @throws RecordDoesNotExistException
      */
-    public Employer findEmployer(Long id, String format) throws RecordDoesNotExistException {
+    public Employer findEmployer(String id, String format) throws RecordDoesNotExistException {
         return employerRepository.findById(id).orElseThrow(() ->
                 new RecordDoesNotExistException(
                         String.format("Employer with id: %s does not exist", id),
@@ -71,7 +72,7 @@ public class EmployerService {
      * @throws BadRequestException
      */
 
-    public Employer deleteEmployer(Long id, String format) throws RecordDoesNotExistException, BadRequestException {
+    public Employer deleteEmployer(String id, String format) throws RecordDoesNotExistException, BadRequestException {
         Employer employer = findEmployer(id, format);
         if (employer.getEmployees() != null && !employer.getEmployees().isEmpty()) {
             throw new BadRequestException(
@@ -83,7 +84,7 @@ public class EmployerService {
         return employer;
     }
 
-    public Employer updateEmployer(Long id, EmployerModel employerModel, String format) throws RecordDoesNotExistException {
+    public Employer updateEmployer(String id, EmployerModel employerModel, String format) throws RecordDoesNotExistException {
         Employer employer = findEmployer(id, format);
         if(employer != null) {
             if (employerModel.getName() != null && !employerModel.getName().isEmpty()) {

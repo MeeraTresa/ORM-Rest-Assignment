@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CollaboratorService {
@@ -32,8 +33,8 @@ public class CollaboratorService {
      * @throws RecordDoesNotExistException
      * @return
      */
-    public String updateCollaborator(Long employerId1, Long employeeId1,
-                                     Long employerId2, Long employeeId2,
+    public String updateCollaborator(String employerId1, Long employeeId1,
+                                     String employerId2, Long employeeId2,
                                      String format) throws RecordDoesNotExistException {
         //Find the employees
         Employee employee1 = findEmployee(employeeId1, employerId1, format);
@@ -41,14 +42,14 @@ public class CollaboratorService {
         //Check if these are existing collaborators
         List<Employee> existingCollaborators = employee1.getCollaborators();
         if(existingCollaborators.stream().anyMatch(e -> e.getEmployeeId().getId()== employeeId2
-                && e.getEmployeeId().getEmployerId() == employerId2)) {
-            return String.format("Already a collaborator");
+                && Objects.equals(e.getEmployeeId().getEmployerId(), employerId2))) {
+            return "Already a collaborator";
         }
         //Must never happen - the below case
         List<Employee> existingCollaborators2 = employee2.getCollaborators();
         if(existingCollaborators2.stream().anyMatch(e -> e.getEmployeeId().getId()== employeeId1
-                && e.getEmployeeId().getEmployerId() == employerId1)) {
-            return String.format("Already a collaborator");
+                && Objects.equals(e.getEmployeeId().getEmployerId(), employerId1))) {
+            return "Already a collaborator";
         }
         employee1.getCollaborators().add(employee2);
         employee2.getCollaborators().add(employee1);
@@ -59,7 +60,7 @@ public class CollaboratorService {
             System.out.println(e.getMessage());
             throw e;
         }
-        return String.format("Request for collaboration successful");
+        return "Request for collaboration successful";
     }
 
     /**
@@ -70,7 +71,7 @@ public class CollaboratorService {
      * @return
      * @throws RecordDoesNotExistException
      */
-    private Employee findEmployee(Long employeeId, Long employerId, String format) throws RecordDoesNotExistException {
+    private Employee findEmployee(Long employeeId, String employerId, String format) throws RecordDoesNotExistException {
         return employeeRepository.
                 findById(new EmployeeId(employeeId, employerId))
                 .orElseThrow(() ->
@@ -102,12 +103,12 @@ public class CollaboratorService {
      * @throws BadRequestException
      */
     @Transactional(Transactional.TxType.REQUIRED)
-    public String deleteCollaborator(Long employerId1, Long employeeId1, Long employerId2, Long employeeId2, String format) throws RecordDoesNotExistException, BadRequestException {
+    public String deleteCollaborator(String employerId1, Long employeeId1, String employerId2, Long employeeId2, String format) throws RecordDoesNotExistException, BadRequestException {
         Employee employee1 = findEmployee(employeeId1, employerId1, format);
         Employee employee2 = findEmployee(employeeId2, employerId2, format);
         List<Employee> existingCollaborators = employee1.getCollaborators();
         if(existingCollaborators.stream().noneMatch(e -> e.getEmployeeId().getId() == employeeId2
-                && e.getEmployeeId().getEmployerId() == employerId2)) {
+                && Objects.equals(e.getEmployeeId().getEmployerId(), employerId2))) {
             throw new BadRequestException(
                     String.format("Employee with id:%s and employer id:%s not a collaborator of" +
                                     "employee with id:%s and employerId:%s",
@@ -120,7 +121,7 @@ public class CollaboratorService {
         }
         List<Employee> existingCollaborators2 = employee2.getCollaborators();
         if(existingCollaborators2.stream().noneMatch(e -> e.getEmployeeId().getId()== employeeId1
-                && e.getEmployeeId().getEmployerId() == employerId1)) {
+                && Objects.equals(e.getEmployeeId().getEmployerId(), employerId1))) {
             throw new BadRequestException(
                     String.format("Employee with id:%s and employer id:%s not a collaborator of" +
                                     "employee with id:%s and employerId:%s",
@@ -134,6 +135,6 @@ public class CollaboratorService {
         employee1.getCollaborators().remove(employee2);
         employee2.getCollaborators().remove(employee1);
         employeeRepository.saveAll(List.of(employee1, employee2));
-        return String.format("Collaboration removed successfully");
+        return "Collaboration removed successfully";
     }
 }

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, EmployeeId> {
     @Query(value = "SELECT COALESCE(MAX(employee_id),0) FROM employee WHERE employee.employer_id = ?1", nativeQuery = true)
-    Long getNextSequence( Long employerId);
+    Long getNextSequence( String employerId);
 
 }

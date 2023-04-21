@@ -49,7 +49,7 @@ public class EmployeeController {
     @PostMapping(path = "employer/{employerId}/employee", produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employee> createEmployee(
-            @PathVariable(required = true) Long employerId,
+            @PathVariable(required = true) String employerId,
             @RequestParam(required = true) String name,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String title,
@@ -90,7 +90,7 @@ public class EmployeeController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employee> getEmployee(
-            @PathVariable(required = true) Long employerId,
+            @PathVariable(required = true) String employerId,
             @PathVariable(required = true) Long id,
             @RequestParam(required = false) String format
     ) throws RecordDoesNotExistException {
@@ -123,7 +123,7 @@ public class EmployeeController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employee> updateEmployee(
-            @PathVariable(required = true) Long employerId,
+            @PathVariable(required = true) String employerId,
             @PathVariable(required = true) Long id,
             @RequestParam(required = true) String name,
             @RequestParam(required = false) String email,
@@ -171,7 +171,7 @@ public class EmployeeController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employee> deleteEmployee(
-            @PathVariable(required = true) Long employerId,
+            @PathVariable(required = true) String employerId,
             @PathVariable(required = true) Long id,
             @RequestParam(required = false) String format) throws RecordDoesNotExistException, BadRequestException {
         return new ResponseEntity<>(employeeService.deleteEmployee(employerId, id, format),

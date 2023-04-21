@@ -79,7 +79,7 @@ public class EmployerController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employer> getEmployee(
-            @PathVariable(required = true) Long id,
+            @PathVariable(required = true) String id,
             @RequestParam(required = false) String format
     ) throws RecordDoesNotExistException {
         return new ResponseEntity<>(employerService.findEmployer(id, format),
@@ -102,7 +102,7 @@ public class EmployerController {
                     MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
     public void deleteEmployer(
-            @PathVariable(required = true) Long id,
+            @PathVariable(required = true) String id,
             @RequestParam(required = false) String format) throws RecordDoesNotExistException, BadRequestException {
         employerService.deleteEmployer(id, format);
 
@@ -132,7 +132,7 @@ public class EmployerController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employer> updateEmployer(
-            @PathVariable(required = true) Long id,
+            @PathVariable(required = true) String id,
             @RequestParam(required = true) String name,
             @RequestParam(required= false) String description,
             @RequestParam(required= false) String street,

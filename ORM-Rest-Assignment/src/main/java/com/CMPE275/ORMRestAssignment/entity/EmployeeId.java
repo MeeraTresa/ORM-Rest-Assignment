@@ -19,7 +19,7 @@ import java.util.Objects;
 public class EmployeeId implements Serializable {
     @Column(name = "employee_id", nullable = false)
     private Long id;
-    private Long employerId;
+    private String employerId;
 
     @Override
     public boolean equals(Object obj) {
@@ -38,7 +38,7 @@ public class EmployeeId implements Serializable {
         if (getEmployerId() == null) {
             if (other.getEmployerId() != null)
                 return false;
-        } else if (getEmployerId() != other.getEmployerId())
+        } else if (!getEmployerId().equals(other.getEmployerId()))
             return false;
         return true;
     }
