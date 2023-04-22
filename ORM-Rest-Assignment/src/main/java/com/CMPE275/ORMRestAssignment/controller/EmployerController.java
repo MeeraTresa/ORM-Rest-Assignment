@@ -7,6 +7,9 @@ import com.CMPE275.ORMRestAssignment.exception.RecordDoesNotExistException;
 import com.CMPE275.ORMRestAssignment.model.EmployerModel;
 import com.CMPE275.ORMRestAssignment.service.EmployerService;
 import com.CMPE275.ORMRestAssignment.util.Util;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,7 +49,7 @@ public class EmployerController {
     @PostMapping( path = "employer",
                   produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employer> createEmployer(
-            @RequestParam(required = true) String name,
+            @RequestParam(required = true) @NotBlank @NotNull String name,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) String street,
             @RequestParam(required = false) String city,
@@ -60,6 +63,8 @@ public class EmployerController {
         employerModel.setCity(city);
         employerModel.setState(state);
         employerModel.setZip(zip);
+        //Validate the name parameter
+        if(name.trim().length()==0) throw new BadRequestException("Employer name cannot be all whitespaces",format);
         return new ResponseEntity<>(employerService.createEmployer(employerModel, format), Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
     }
 
@@ -133,15 +138,17 @@ public class EmployerController {
                     MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Employer> updateEmployer(
             @PathVariable(required = true) String id,
-            @RequestParam(required = true) String name,
+            @RequestParam(required = true) @NotBlank @NotNull String name,
             @RequestParam(required= false) String description,
             @RequestParam(required= false) String street,
             @RequestParam(required= false) String city,
             @RequestParam(required= false) String state,
             @RequestParam(required= false) String zip,
-            @RequestParam(required = false) String format) throws RecordDoesNotExistException {
+            @RequestParam(required = false) String format) throws RecordDoesNotExistException,BadRequestException {
         EmployerModel employerModel = new EmployerModel(name, description,
                 street, city, state, zip);
+        //validate the name parameter
+        if(name.trim().length()==0) throw new BadRequestException("Employer name cannot be all whitespaces",format);
         return new ResponseEntity<>(employerService.updateEmployer(id, employerModel, format),
                 Util.setContentTypeAndReturnHeaders(format), HttpStatus.OK);
     }
